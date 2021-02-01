@@ -2,17 +2,14 @@ package router
 
 import (
 	"github.com/gogf/gf/frame/g"
-	"github.com/gogf/gf/net/ghttp"
+	"lqc.com/tree/app/api/user"
+	"lqc.com/tree/app/service"
 )
 
 func init() {
 	server := g.Server()
+	server.Use(service.Middlewave.Ctx)
+	server.BindHandler("/a", user.User.A)
+	server.BindHandler("/b", user.User.B)
 
-	server.Group("/", func(group *ghttp.RouterGroup) {
-		group.ALL("/", func(r *ghttp.Request) {
-			r.Response.Writeln(r.Get("list"))
-
-		})
-
-	})
 }
