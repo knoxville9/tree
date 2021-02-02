@@ -12,3 +12,16 @@ import (
 type User internal.User
 
 // Fill with you ideas below.
+
+type UserDoSignUpReq struct {
+	Passport string `orm:"passport"   json:"passport" v:"required|length:6,30"` // 用户账号
+	Password string `orm:"password"   json:"password" v:"required|length:6,30"` // 用户密码
+	Nickname string `orm:"nickname"   json:"nickname" `                         // 用户昵称
+
+}
+
+type UserDoLogInReq struct {
+	Passport string `orm:"passport"   json:"passport" v:"required|length:6,30"` // 用户账号
+	Password string `orm:"password"   json:"password" v:"required|length:6,30"` // 用户密码
+
+}

@@ -9,7 +9,7 @@ import (
 func init() {
 	server := g.Server()
 	server.Use(service.Middlewave.Ctx)
-	server.BindHandler("/a", user.User.A)
-	server.BindHandler("/b", user.User.B)
+	group := server.Group("/user")
+	group.ALL("/", user.User)
 
 }

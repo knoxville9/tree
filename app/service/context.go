@@ -10,14 +10,16 @@ var Context = new(ContextService)
 
 type ContextService struct{}
 
+var ContextKey = "ContextKey"
+
 func (c *ContextService) Init(r *ghttp.Request, ctx *model.Context) {
-	r.SetCtxVar(model.ContextKey, ctx)
+	r.SetCtxVar(ContextKey, ctx)
 
 }
 
 func (c *ContextService) Get(ctx context.Context) *model.Context {
-	value := ctx.Value(model.ContextKey)
-	if ctx.Value(model.ContextKey) == nil {
+	value := ctx.Value(ContextKey)
+	if ctx.Value(ContextKey) == nil {
 		return nil
 
 	}

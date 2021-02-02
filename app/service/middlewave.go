@@ -12,7 +12,10 @@ type middlewaveService struct {
 
 func (s *middlewaveService) Ctx(r *ghttp.Request) {
 	context := &model.Context{}
-	r.SetCtxVar("a", context)
+
+	context.User = &model.User{}
+
+	r.SetCtxVar(ContextKey, context)
 	r.Middleware.Next()
 
 }
