@@ -17,6 +17,6 @@ func (u *userApi) A(r *ghttp.Request) {
 }
 
 func (u *userApi) B(r *ghttp.Request) {
-	r.Response.Writeln(r.Context().Value("a"))
-
+	ctxVar := r.GetCtxVar("a").Interface().(*model.Context)
+	r.Response.Writeln(ctxVar)
 }
