@@ -42,20 +42,41 @@ func (s *UserService) Login(ctx context.Context, req *model.UserDoLogInReq) erro
 	encrypt, _ := gmd5.Encrypt(req.Password)
 	req.Password = encrypt
 
-	if user, err := dao.User.FindOne("password=? and passport=?", req.Password, req.Passport); err != nil {
+	user, err := dao.User.FindOne("password=? and passport=?", req.Password, req.Passport)
+
+	if err != nil {
 		return err
 	} else {
 		if user == nil {
 			return errors.New("账号或密码错误")
 		}
 	}
-	Session.SetUser(ctx, req)
+
+	Context.Set(ctx, user)
+	if err := Context.Get(ctx).Session.Set(SessionKey, user); err != nil {
+		return err
+	}
+
 	return nil
 
 }
 
 //退出
 func (s *UserService) Logout(ctx context.Context) error {
-	return Session.Remove(ctx)
+	if err := Context.Get(ctx).Session.Remove(SessionKey); err != nil {
+		return err
+	}
+	return nil
+}
 
+//返回用户信息
+func (s *UserService) Profile(ctx context.Context) (*model.User, error) {
+	get := Context.Get(ctx)
+	user := get.Session.GetVar(SessionKey)
+	if !user.IsNil() {
+		if a, b := user.Interface().(*model.User); b {
+			return a, nil
+		}
+	}
+	return nil, errors.New("信息已清空")
 }

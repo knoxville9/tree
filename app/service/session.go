@@ -22,16 +22,16 @@ func (s *sessionService) Remove(ctx context.Context) error {
 
 //获取用户信息时,可以调用该接口
 func (s *sessionService) GetUser(ctx context.Context) *model.User {
-	get := Context.Get(ctx)
-	user := get.User
 
-	return user
+	if a, b := Context.Get(ctx).Session.Get(SessionKey).(*model.User); b {
+		return a
+	}
+	return nil
 
 }
 
 //登录时在context中设置用户的session
-func (s *sessionService) SetUser(ctx context.Context, req *model.UserDoLogInReq) {
-	get := Context.Get(ctx).User
-	get.Passport = req.Passport
+func (s *sessionService) SetUser(ctx context.Context, req *model.User) {
+	Context.Get(ctx).User = req
 
 }

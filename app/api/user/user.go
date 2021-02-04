@@ -15,28 +15,32 @@ var User = new(userApi)
 type userApi struct {
 }
 
-//注册
+// @Summary 注册
+// @Accept json
+// @Produce json
+// @Param passport query string true "用户名"
+// @Param password query string true "密码"
+// @Param nickname query string false "昵称"
+// @Router /user/signup [post]
 func (u *userApi) Signup(r *ghttp.Request) {
 	ctxVar := r.GetCtx()
 	var req *model.UserDoSignUpReq
 
 	if err := r.Parse(&req); err != nil {
 		if a, ok := err.(*gvalid.Error); ok {
-			response.JsonExit(r, http.StatusInternalServerError, a.FirstString(), "")
-
+			response.JsonExit(r, http.StatusInternalServerError, a.FirstString(), nil)
 		}
-
 	}
 
 	if err := service.User.Signup(ctxVar, req); err != nil {
-		response.JsonExit(r, http.StatusInternalServerError, err.Error(), "")
+		response.JsonExit(r, http.StatusInternalServerError, err.Error(), nil)
 	}
 
-	if err := r.Response.WriteJsonExit(
+	if err := r.Response.WriteJson(
 		g.Map{
 			"code":  http.StatusOK,
-			"error": "",
-			"data":  "ok",
+			"error": nil,
+			"data":  "注册成功",
 		}); err != nil {
 		panic(err)
 
@@ -44,38 +48,51 @@ func (u *userApi) Signup(r *ghttp.Request) {
 
 }
 
-//登录
+// @Summary 登录
+// @Accept json
+// @Produce json
+// @Param passport query string true "用户名"
+// @Param password query string true "密码"
+// @Router /user/login [post]
 func (u *userApi) Login(r *ghttp.Request) {
 
 	var req *model.UserDoLogInReq
-	ctxVar := r.GetCtx()
+	ctx := r.Context()
+	//校验登录参数
 	if err := r.Parse(&req); err != nil {
+
 		if a, ok := err.(*gvalid.Error); ok {
-			response.JsonExit(r, http.StatusInternalServerError, a.FirstString(), "")
+			response.JsonExit(r, http.StatusInternalServerError, a.FirstString(), nil)
 		}
 	}
-	if err := service.User.Login(ctxVar, req); err != nil {
-		response.JsonExit(r, http.StatusInternalServerError, err.Error(), "")
+	if err := service.User.Login(ctx, req); err != nil {
+		response.JsonExit(r, http.StatusInternalServerError, err.Error(), nil)
 
 	} else {
-		response.JsonExit(r, http.StatusOK, "ok", "")
+		response.Json(r, http.StatusOK, "登录成功", nil)
 	}
 
 }
 
-//获取用户信息
+// @Summary 获得用户信息
+// @Router /user/profile [get]
 func (u *userApi) Profile(r *ghttp.Request) {
-
-	service.Session.GetUser(r.GetCtx())
-	response.JsonExit(r, http.StatusOK, "ok", service.Session.GetUser(r.GetCtx()))
+	if user, err := service.User.Profile(r.Context()); err != nil {
+		response.JsonExit(r, http.StatusInternalServerError, err.Error(), nil)
+	} else {
+		response.Json(r, http.StatusOK, "nil", user)
+	}
 
 }
 
-//退出
+// @Summary 退出
+// @Router /user/logout [get]
 func (u *userApi) Logout(r *ghttp.Request) {
-	ctx := r.GetCtx()
-	if err := service.User.Logout(ctx); err != nil {
-		panic(err)
+	if err := service.User.Logout(r.Context()); err != nil {
+		response.JsonExit(r, http.StatusInternalServerError, err.Error(), nil)
+
+	} else {
+		response.JsonExit(r, http.StatusOK, "退出成功", nil)
 	}
 
 }
