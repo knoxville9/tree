@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"lqc.com/tree/app/model"
 	"lqc.com/tree/library/response"
@@ -34,4 +35,15 @@ func (s *middlewaveService) Auth(r *ghttp.Request) {
 		response.JsonExit(r, http.StatusForbidden, "认证失败,请重新登录")
 	}
 
+}
+
+func (s *middlewaveService) MiddlewareErrorHandler(r *ghttp.Request) {
+	r.Middleware.Next()
+	if err := r.GetError(); err != nil {
+		// 记录到自定义错误日志文件
+		g.Log("exception").Error(err)
+		//返回固定的友好信息
+		r.Response.ClearBuffer()
+		r.Response.Writeln("服务器异常，请稍后再试")
+	}
 }
