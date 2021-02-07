@@ -21,3 +21,4 @@ main
 .vscode
 go.sum
 /packed/swagger.go
+/1.txt
