@@ -13,7 +13,7 @@ func main() {
 
 	s := g.Server()
 	s.Group("/admin", func(group *ghttp.RouterGroup) {
-		group.ALL("/login", service.Middlewave.GenToken)
+		group.Middleware(service.Middlewave.GenToken)
 		group.Group("/", func(group *ghttp.RouterGroup) {
 			group.Middleware(service.Middlewave.AuthInRedis)
 			group.ALL("/index", func(r *ghttp.Request) {

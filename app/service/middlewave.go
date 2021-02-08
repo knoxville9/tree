@@ -51,7 +51,14 @@ func (s *middlewaveService) AuthInRedis(r *ghttp.Request) {
 	}
 }
 
+func (s *middlewaveService) MiddlewareCORS(r *ghttp.Request) {
+	r.Response.CORSDefault()
+	r.Middleware.Next()
+}
+
 func (s *middlewaveService) GenToken(r *ghttp.Request) {
+	r.Session.Set("time", guid.S())
+
 	var token string
 	conn := g.Redis().Conn()
 	defer conn.Close()
