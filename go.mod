@@ -9,15 +9,16 @@ require (
 	github.com/antchfx/xmlquery v1.3.3 // indirect
 	github.com/antchfx/xpath v1.1.11 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect
-	github.com/go-openapi/spec v0.20.2 // indirect
+	github.com/go-openapi/spec v0.20.3 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gocolly/colly v1.2.0
 	github.com/gogf/gf v1.15.3
-	github.com/gogf/swagger v1.2.0 // indirect
+	github.com/gogf/swagger v1.2.0
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/grokify/html-strip-tags-go v0.0.1 // indirect
 	github.com/kennygrant/sanitize v1.2.4 // indirect
+	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-runewidth v0.0.10 // indirect
 	github.com/olekukonko/tablewriter v0.0.4 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
