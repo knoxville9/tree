@@ -12,7 +12,7 @@
     cookieDomain = ""                 # Cookie有效域名。默认为当前配置Cookie时的域名
 
     # Sessions配置
-    sessionMaxAge = "10s"              # Session有效期。默认为24小时
+    sessionMaxAge = "24h"              # Session有效期。默认为24小时
     sessionIdName = "sessionid"      # SessionId的键名名称。默认为gfsessionid
     sessionCookieOutput = true               # Session特性开启时，是否将SessionId返回到Cookie中。默认true
     sessionPath = "tmp/sessions"   # Session存储的文件目录路径。默认为当前系统临时目录下的gsessions目录

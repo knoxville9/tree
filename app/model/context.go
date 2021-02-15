@@ -7,4 +7,5 @@ import (
 type Context struct {
 	Session *ghttp.Session
 	User    *User
+	Post    *Post
 }

@@ -31,7 +31,8 @@ type replyColumns struct {
 	Userid   string //
 	Content  string //
 	CreateAt string //
-	Deleted  string //
+	Deleted  string // 删除为1
+	Num      string //
 }
 
 var (
@@ -47,6 +48,7 @@ var (
 			Content:  "content",
 			CreateAt: "CreateAt",
 			Deleted:  "deleted",
+			Num:      "num",
 		},
 	}
 )

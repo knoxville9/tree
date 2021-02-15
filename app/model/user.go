@@ -14,9 +14,9 @@ type User internal.User
 // Fill with you ideas below.
 
 type UserDoSignUpReq struct {
-	Passport string `orm:"passport"   json:"passport" v:"required|passport #|字母开头，只能包含字母、数字和下划线，长度在6~18之间"` // 用户账号
-	Password string `orm:"password"   json:"password" v:"required|password3 #|必须包含大小写字母、数字和特殊字符"`           // 用户密码
-	Nickname string `orm:"nickname"   json:"nickname" `                                                     // 用户昵称
+	Passport string `orm:"passport"   json:"passport" v:"required|passport #|账号字母开头，只能包含字母、数字和下划线，长度在6~18之间"` // 用户账号
+	Password string `orm:"password"   json:"password" v:"required|password #|密码必须包含大小写字母、数字和特殊字符"`            // 用户密码
+	Nickname string `orm:"nickname"   json:"nickname" `                                                       // 用户昵称
 
 }
 

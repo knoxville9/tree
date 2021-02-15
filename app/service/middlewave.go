@@ -20,6 +20,8 @@ func (s *middlewaveService) Ctx(r *ghttp.Request) {
 		Session: r.Session,
 	}
 	context.User = &model.User{}
+	//和下面的语句相同作用
+	//r.SetCtxVar(ContextKey,context)
 	Context.Init(r, context)
 
 	if a := Session.GetUser(r.Context()); a != nil {

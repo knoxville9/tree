@@ -15,5 +15,6 @@ type Reply struct {
 	Userid   uint        `orm:"userid"     json:"userid"`   //
 	Content  string      `orm:"content"    json:"content"`  //
 	CreateAt *gtime.Time `orm:"CreateAt"   json:"createAt"` //
-	Deleted  int         `orm:"deleted"    json:"deleted"`  //
+	Deleted  int         `orm:"deleted"    json:"deleted"`  // 删除为1
+	Num      uint        `orm:"num"        json:"num"`      //
 }

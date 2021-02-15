@@ -31,8 +31,10 @@ func (c *ContextService) Get(ctx context.Context) *model.Context {
 	return nil
 }
 
-func (c *ContextService) Set(ctx context.Context, user *model.User) {
-
+func (c *ContextService) SetUser(ctx context.Context, user *model.User) {
 	c.Get(ctx).User = user
+}
 
+func (c *ContextService) SetPost(ctx context.Context, post *model.Post) {
+	c.Get(ctx).Post = post
 }

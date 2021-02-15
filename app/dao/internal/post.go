@@ -32,7 +32,7 @@ type postColumns struct {
 	UpdateAt string //
 	Title    string //
 	Content  string //
-	Deleted  string // 删除为true
+	Deleted  string // 删除为1
 }
 
 var (

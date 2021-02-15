@@ -52,7 +52,7 @@ func (s *UserService) Login(ctx context.Context, req *model.UserDoLogInReq) erro
 		}
 	}
 
-	Context.Set(ctx, user)
+	Context.SetUser(ctx, user)
 	if err := Context.Get(ctx).Session.Set(SessionKey, user); err != nil {
 		return err
 	}

@@ -16,5 +16,5 @@ type Post struct {
 	UpdateAt *gtime.Time `orm:"UpdateAt"   json:"updateAt"` //
 	Title    string      `orm:"title"      json:"title"`    //
 	Content  string      `orm:"content"    json:"content"`  //
-	Deleted  int         `orm:"deleted"    json:"deleted"`  // 删除为true
+	Deleted  int         `orm:"deleted"    json:"deleted"`  // 删除为1
 }
