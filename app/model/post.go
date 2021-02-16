@@ -14,7 +14,6 @@ type Post internal.Post
 // Fill with you ideas below.
 
 type PostDoCreate struct {
-	UserId  int
 	Title   string `json:"Title"  v:"required|length:6,30"`    // 用户账号
 	Content string `json:"Content" v:"required|length:10,255"` // 用户账号
 }

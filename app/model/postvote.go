@@ -12,3 +12,9 @@ import (
 type Postvote internal.Postvote
 
 // Fill with you ideas below.
+
+type PostvoteDoVote struct {
+	Userid uint
+	Pid    *int `json:"Pid" v:"required"`
+	Vote   *int `json:"vote" v:"required|min:0|max:1"`
+}

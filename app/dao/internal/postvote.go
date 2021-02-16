@@ -27,10 +27,11 @@ type PostvoteDao struct {
 // PostvoteColumns defines and stores column names for table postvote.
 type postvoteColumns struct {
 	Id       string //
-	Postid   string //
+	Pid      string //
 	Userid   string //
 	Vote     string // 点赞1,踩0
 	CreateAt string //
+	Deleted  string // 删除为1
 }
 
 var (
@@ -41,10 +42,11 @@ var (
 		Table: "postvote",
 		Columns: postvoteColumns{
 			Id:       "id",
-			Postid:   "postid",
+			Pid:      "pid",
 			Userid:   "userid",
 			Vote:     "vote",
 			CreateAt: "CreateAt",
+			Deleted:  "deleted",
 		},
 	}
 )

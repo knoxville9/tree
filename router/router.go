@@ -20,7 +20,7 @@ func init() {
 	User.Middleware(service.Middlewave.Auth)
 	User.ALL("/profile", api.User.Profile)
 	Post := s.Group("/post")
-	//Post.Middleware(service.Middlewave.Auth)
+	Post.Middleware(service.Middlewave.Auth)
 	Post.ALL("/", api.Post)
 
 }

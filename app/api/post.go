@@ -56,7 +56,6 @@ func (a *postApi) Create(r *ghttp.Request) {
 			response.JsonExit(r, http.StatusInternalServerError, a.FirstString(), nil)
 		}
 	} else {
-		req.UserId = int(r.Context().Value(service.ContextKey).(*model.Context).User.Id)
 
 		if err := service.Post.Create(r.Context(), req); err != nil {
 			response.JsonExit(r, http.StatusInternalServerError, err.Error(), nil)
@@ -67,13 +66,24 @@ func (a *postApi) Create(r *ghttp.Request) {
 }
 
 //删帖
-func (a *postApi) Delete() {
+func (a *postApi) Delete(r *ghttp.Request) {
+
 }
 
-//赞
-func (a *postApi) UpVote() {
-}
+//赞踩
+func (a *postApi) Vote(r *ghttp.Request) {
+	var req *model.PostvoteDoVote
 
-//踩
-func (a *postApi) DownVote() {
+	if err := r.Parse(&req); err != nil {
+		if a, ok := err.(*gvalid.Error); ok {
+			response.JsonExit(r, http.StatusInternalServerError, a.FirstString(), nil)
+		}
+	} else {
+		if err := service.Post.Vote(r.Context(), req); err != nil {
+			response.JsonExit(r, http.StatusInternalServerError, err.Error(), nil)
+		}
+
+	}
+	response.Json(r, http.StatusOK, "ok!~")
+
 }

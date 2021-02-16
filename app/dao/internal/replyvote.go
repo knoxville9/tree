@@ -31,6 +31,7 @@ type replyvoteColumns struct {
 	Userid   string //
 	Vote     string // 点赞1,踩0
 	CreateAt string //
+	Deleted  string // 删除为1
 }
 
 var (
@@ -45,6 +46,7 @@ var (
 			Userid:   "userid",
 			Vote:     "vote",
 			CreateAt: "CreateAt",
+			Deleted:  "deleted",
 		},
 	}
 )

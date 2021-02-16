@@ -27,7 +27,7 @@ type ReplyDao struct {
 // ReplyColumns defines and stores column names for table reply.
 type replyColumns struct {
 	Id       string //
-	Postid   string //
+	Pid      string //
 	Userid   string //
 	Content  string //
 	CreateAt string //
@@ -43,7 +43,7 @@ var (
 		Table: "reply",
 		Columns: replyColumns{
 			Id:       "id",
-			Postid:   "postid",
+			Pid:      "pid",
 			Userid:   "userid",
 			Content:  "content",
 			CreateAt: "CreateAt",

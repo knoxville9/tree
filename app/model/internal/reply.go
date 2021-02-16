@@ -11,7 +11,7 @@ import (
 // Reply is the golang structure for table reply.
 type Reply struct {
 	Id       uint        `orm:"id,primary" json:"id"`       //
-	Postid   uint        `orm:"postid"     json:"postid"`   //
+	Pid      uint        `orm:"pid"        json:"pid"`      //
 	Userid   uint        `orm:"userid"     json:"userid"`   //
 	Content  string      `orm:"content"    json:"content"`  //
 	CreateAt *gtime.Time `orm:"CreateAt"   json:"createAt"` //
