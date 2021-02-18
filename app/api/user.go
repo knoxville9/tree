@@ -16,11 +16,9 @@ type userApi struct {
 }
 
 // @Summary 注册
-// @Accept json
-// @Produce json
-// @Param passport query string true "用户名"
-// @Param password query string true "密码"
-// @Param nickname query string false "昵称"
+// @Param passport formData string true "用户名"
+// @Param password formData string true "密码"
+// @Param nickname formData string false "昵称"
 // @Router /user/signup [post]
 func (u *userApi) Signup(r *ghttp.Request) {
 	ctxVar := r.GetCtx()
@@ -49,10 +47,8 @@ func (u *userApi) Signup(r *ghttp.Request) {
 }
 
 // @Summary 登录
-// @Accept json
-// @Produce json
-// @Param passport query string true "用户名"
-// @Param password query string true "密码"
+// @Param passport formData string true "用户名"
+// @Param password formData string true "密码"
 // @Router /user/login [post]
 func (u *userApi) Login(r *ghttp.Request) {
 

@@ -38,10 +38,6 @@ func (s *postService) Create(ctx context.Context, req *model.PostDoCreate) error
 	return nil
 }
 
-type Pagination struct {
-	Code int
-}
-
 func (s *postService) List(ctx context.Context, req *model.PostDoList) ([]*model.Post, error) {
 	//返回没有被删除的post
 	if all, err := dao.Post.Page(req.Page, req.Size).Where("deleted = 0").FindAll(); err != nil {
@@ -57,21 +53,16 @@ func (s *postService) Vote(ctx context.Context, req *model.PostvoteDoVote) error
 	user := ctx.Value(ContextKey).(*model.Context).User
 	//1.同一个post,同一个userid不能点赞多次
 	//2.
-	if count, err := dao.Post.Where("id = ?", req.Pid).FindCount(); err != nil {
+	if err := IfPostExist(*req.Pid); err != nil {
 		return err
-	} else {
-		if count == 0 {
-			return errors.New("post不存在~")
-		}
-
 	}
+
 	if one, err := dao.Postvote.Where("pid=? and userid = ?", req.Pid, user.Id).FindOne(); err != nil {
 		return err
 	} else {
 		//判断是否为空
 		if one == nil {
 			//将上下文信息 用户id放入请求中
-			req.Userid = user.Id
 			dao.Postvote.Save(req)
 			//如果预期操作和已存在数据库中的操作不一致则更新
 		} else if one.Vote != *req.Vote {
@@ -87,4 +78,36 @@ func (s *postService) Vote(ctx context.Context, req *model.PostvoteDoVote) error
 
 }
 
-func (s *postService) Delete() {}
+func (s *postService) Delete(ctx context.Context, req *model.PostDoDelete) error {
+	user := ctx.Value(ContextKey).(*model.Context).User
+
+	if err := IfPostExist(req.Pid); err != nil {
+		return err
+	}
+	dao.Postvote.Data("deleted", 1).Where("pid = ? and userid = ?", req.Pid, user.Id).Update()
+
+	return nil
+}
+
+func IfPostExist(req int) error {
+	if count, err := dao.Post.Where("id = ?", req).FindCount(); err != nil {
+		return err
+	} else {
+		if count == 0 {
+			return errors.New("post不存在~")
+		}
+	}
+	return nil
+}
+
+func IfPostDeleted(pid, userid int) error {
+	one, err := dao.Post.Where("id = ? and userid = ?", pid, userid).FindOne()
+	if err != nil {
+		return err
+	}
+	if one.Deleted == 1 {
+		return errors.New("请勿重复删除")
+	}
+
+	return nil
+}

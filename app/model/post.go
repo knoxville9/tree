@@ -14,11 +14,15 @@ type Post internal.Post
 // Fill with you ideas below.
 
 type PostDoCreate struct {
-	Title   string `json:"Title"  v:"required|length:6,30"`    // 用户账号
-	Content string `json:"Content" v:"required|length:10,255"` // 用户账号
+	Title   string `json:"Title"  v:"required|length:6,30"`
+	Content string `json:"Content" v:"required|length:10,255"`
 }
 
 type PostDoList struct {
-	Page int `json:"page"   v:"required|integer|min:0"` // 用户账号
-	Size int `json:"size"   v:"required|integer|min:1"` // 用户账号
+	Page int `json:"page"   v:"required|integer|min:0"`
+	Size int `json:"size"   v:"required|integer|min:1"`
+}
+
+type PostDoDelete struct {
+	Pid int `json:"pid"   v:"required|integer"`
 }
