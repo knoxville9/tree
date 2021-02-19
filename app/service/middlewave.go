@@ -21,8 +21,8 @@ func (s *middlewaveService) Ctx(r *ghttp.Request) {
 	}
 	context.User = &model.User{}
 	//和下面的语句相同作用
-	//r.SetCtxVar(ContextKey,context)
-	Context.Init(r, context)
+	r.SetCtxVar(ContextKey, context)
+	//Context.Init(r, context)
 
 	if a := Session.GetUser(r.Context()); a != nil {
 		context.User = a
@@ -87,4 +87,20 @@ func (s *middlewaveService) MiddlewareErrorHandler(r *ghttp.Request) {
 		r.Response.ClearBuffer()
 		r.Response.Writeln("服务器异常，请稍后再试")
 	}
+}
+
+func (s *middlewaveService) MiddlewareTea(r *ghttp.Request) {
+
+	if user := r.Context().Value(ContextKey).(*model.Context).User; user != nil {
+		do, _ := g.Redis().DoVar("EXISTS", user.Id)
+		if do.Int() == 0 {
+			g.Redis().Do("set", user.Id, user.Id)
+			g.Redis().Do("EXPIRE", user.Id, 2)
+			r.Middleware.Next()
+		} else {
+			response.JsonExit(r, http.StatusInternalServerError, "操作太快了~喝杯茶休息下~")
+
+		}
+	}
+
 }

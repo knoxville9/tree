@@ -11,4 +11,8 @@ import (
 // Replyvote is the golang structure for table replyvote.
 type Replyvote internal.Replyvote
 
+type ReplyvoteE struct {
+	Replyvote []*Replyvote
+}
+
 // Fill with you ideas below.

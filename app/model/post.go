@@ -12,8 +12,14 @@ import (
 type Post internal.Post
 
 // Fill with you ideas below.
+type PostE struct {
+	*Post
+	Replies  []*Reply    `json:"Replies"`
+	Postvote []*Postvote `json:"Postvote"`
+}
 
 type PostDoCreate struct {
+	Userid  int
 	Title   string `json:"Title"  v:"required|length:6,30"`
 	Content string `json:"Content" v:"required|length:10,255"`
 }
@@ -24,5 +30,9 @@ type PostDoList struct {
 }
 
 type PostDoDelete struct {
-	Pid int `json:"pid"   v:"required|integer"`
+	Pid *int `json:"pid"   v:"required|integer"`
+}
+
+type PostDoDetail struct {
+	Pid *int `json:"pid"   v:"required|integer"`
 }

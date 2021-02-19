@@ -13,6 +13,7 @@ func init() {
 	s.Use(service.Middlewave.MiddlewareErrorHandler)
 	s.Plugin(&swagger.Swagger{})
 	s.Use(service.Middlewave.Ctx)
+	s.Use(service.Middlewave.MiddlewareTea)
 	User := s.Group("/user")
 	User.ALL("/login", api.User.Login)
 	User.ALL("/signup", api.User.Signup)
@@ -21,6 +22,11 @@ func init() {
 	User.ALL("/profile", api.User.Profile)
 	Post := s.Group("/post")
 	Post.Middleware(service.Middlewave.Auth)
+
 	Post.ALL("/", api.Post)
+
+	PostVote := s.Group("/postvote")
+	PostVote.Middleware(service.Middlewave.Auth)
+	PostVote.ALL("/", api.PostVote)
 
 }

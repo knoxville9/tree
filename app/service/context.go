@@ -14,7 +14,6 @@ var ContextKey = "ContextKey"
 
 func (c *ContextService) Init(r *ghttp.Request, ctx *model.Context) {
 	r.SetCtxVar(ContextKey, ctx)
-
 }
 
 func (c *ContextService) Get(ctx context.Context) *model.Context {

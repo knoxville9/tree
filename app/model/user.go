@@ -15,13 +15,13 @@ type User internal.User
 
 type UserDoSignUpReq struct {
 	Passport string `orm:"passport"   json:"passport" v:"required|passport #|账号字母开头，只能包含字母、数字和下划线，长度在6~18之间"` // 用户账号
-	Password string `orm:"password"   json:"password" v:"required|password #|密码必须包含大小写字母、数字和特殊字符"`            // 用户密码
+	Password string `orm:"password"   json:"password" v:"required|password #|通用密码(任意可见字符，长度在6~18之间)"`         // 用户密码
 	Nickname string `orm:"nickname"   json:"nickname" `                                                       // 用户昵称
 
 }
 
 type UserDoLogInReq struct {
-	Passport string `orm:"passport"   json:"passport" v:"required|length:6,30"` // 用户账号
-	Password string `orm:"password"   json:"-" v:"required|length:6,30"`        // 用户密码
+	Passport string `orm:"passport"   json:"passport" v:"required|length:6,18"` // 用户账号
+	Password string `orm:"password"   json:"-" v:"required|length:6,18"`        // 用户密码
 
 }

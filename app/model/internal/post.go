@@ -17,4 +17,5 @@ type Post struct {
 	Title    string      `orm:"title"      json:"title"`    //
 	Content  string      `orm:"content"    json:"content"`  //
 	Deleted  int         `orm:"deleted"    json:"deleted"`  // 删除为1
+
 }

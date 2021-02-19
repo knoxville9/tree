@@ -13,7 +13,12 @@ type Postvote internal.Postvote
 
 // Fill with you ideas below.
 
+type PostvoteE struct {
+	Postvote []*PostvoteE
+}
+
 type PostvoteDoVote struct {
-	Pid  *int `json:"Pid" v:"required"`
-	Vote *int `json:"vote" v:"required|min:0|max:1"`
+	Userid int
+	Pid    *int `json:"Pid" v:"required"`
+	Vote   *int `json:"vote" v:"required|min:0|max:1"`
 }

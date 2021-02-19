@@ -63,7 +63,14 @@ func (a *postApi) Create(r *ghttp.Request) {
 		if a, ok := err.(*gvalid.Error); ok {
 			response.JsonExit(r, http.StatusInternalServerError, a.FirstString(), nil)
 		}
+
 	} else {
+		b := []byte(req.Title)
+		if len(b) != 0 {
+			if b[0] == '\n' || b[0] == ' ' || b[0] == '\t' {
+				response.JsonExit(r, http.StatusInternalServerError, "标题请勿以空白符开始~", nil)
+			}
+		}
 
 		if err := service.Post.Create(r.Context(), req); err != nil {
 			response.JsonExit(r, http.StatusInternalServerError, err.Error(), nil)
@@ -74,6 +81,9 @@ func (a *postApi) Create(r *ghttp.Request) {
 }
 
 //删帖
+// @Summary 删除post
+// @Param pid formData string true "postid"
+// @Router /post/delete [post]
 func (a *postApi) Delete(r *ghttp.Request) {
 	var req *model.PostDoDelete
 
@@ -90,24 +100,16 @@ func (a *postApi) Delete(r *ghttp.Request) {
 	response.Json(r, http.StatusOK, "删除post成功~")
 }
 
-//赞踩
-// @Summary 踩赞
-// @Param pid formData  string true "post的id"
-// @Param vote formData string true "1赞,0踩"
-// @Router /post/vote [post]
-func (a *postApi) Vote(r *ghttp.Request) {
-	var req *model.PostvoteDoVote
-
+//post详细
+func (a *postApi) Detail(r *ghttp.Request) {
+	var req *model.PostDoDetail
 	if err := r.Parse(&req); err != nil {
 		if a, ok := err.(*gvalid.Error); ok {
 			response.JsonExit(r, http.StatusInternalServerError, a.FirstString(), nil)
 		}
 	} else {
-		if err := service.Post.Vote(r.Context(), req); err != nil {
-			response.JsonExit(r, http.StatusInternalServerError, err.Error(), nil)
-		}
 
 	}
-	response.Json(r, http.StatusOK, "ok!~")
+	response.Json(r, http.StatusOK, "删除post成功~")
 
 }

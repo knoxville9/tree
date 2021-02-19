@@ -17,21 +17,13 @@ type postService struct {
 func (s *postService) Create(ctx context.Context, req *model.PostDoCreate) error {
 	user := ctx.Value(ContextKey).(*model.Context).User
 
-	if one, err := dao.Post.Where("userid = ? and deleted = ?", user.Id, 0).Order("id desc").FindOne("title = ?", req.Title); err != nil {
+	if err := IfPostOften(req.Title, user.Id); err != nil {
 		return err
-	} else {
-		findOne, _ := dao.Post.Where("userid = ? and deleted = ?", user.Id, 0).Order("CreateAt desc").FindOne()
-		if time.Now().Unix()-findOne.CreateAt.Timestamp() < 300 {
-			fmt.Println(time.Now().Unix() - findOne.CreateAt.Timestamp())
-			return errors.New("5分钟内已经发过贴,请等待5分钟~")
-		}
-
-		if one != nil {
-			return errors.New("标题重复,请重新命名~")
-		}
-
 	}
-
+	if err := IfPostRename(int(user.Id), req.Title); err != nil {
+		return err
+	}
+	req.Userid = int(user.Id)
 	if _, err := dao.Post.Save(req); err != nil {
 		return err
 	}
@@ -49,65 +41,130 @@ func (s *postService) List(ctx context.Context, req *model.PostDoList) ([]*model
 
 }
 
-func (s *postService) Vote(ctx context.Context, req *model.PostvoteDoVote) error {
-	user := ctx.Value(ContextKey).(*model.Context).User
-	//1.同一个post,同一个userid不能点赞多次
-	//2.
-	if err := IfPostExist(*req.Pid); err != nil {
-		return err
-	}
-
-	if one, err := dao.Postvote.Where("pid=? and userid = ?", req.Pid, user.Id).FindOne(); err != nil {
-		return err
-	} else {
-		//判断是否为空
-		if one == nil {
-			//将上下文信息 用户id放入请求中
-			dao.Postvote.Save(req)
-			//如果预期操作和已存在数据库中的操作不一致则更新
-		} else if one.Vote != *req.Vote {
-			dao.Postvote.Data("vote = ?", req.Vote).Where("pid=? and userid = ?", req.Pid, user.Id).Update()
-			//如果操作一样则提示
-		} else if one.Vote == *req.Vote {
-			return errors.New("你已经操作过了")
-		}
-
-	}
-
-	return nil
-
-}
-
 func (s *postService) Delete(ctx context.Context, req *model.PostDoDelete) error {
 	user := ctx.Value(ContextKey).(*model.Context).User
 
-	if err := IfPostExist(req.Pid); err != nil {
+	if err := IfPostExist(*req.Pid); err != nil {
 		return err
 	}
-	dao.Postvote.Data("deleted", 1).Where("pid = ? and userid = ?", req.Pid, user.Id).Update()
+	if err := IfPostOwned(uint(*req.Pid), user.Id); err != nil {
+		return err
+	}
+	if err := IfPostDeleted(*req.Pid); err != nil {
+		return err
+	}
+
+	_, err := dao.Post.Data("deleted", 1).Where("id = ? and userid = ?", req.Pid, user.Id).Update()
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
 
+func (s *postService) Detail(ctx context.Context, req *model.PostDoDetail) (*model.PostE, error) {
+
+	if err := IfPostExist(*req.Pid); err != nil {
+		return nil, err
+	}
+
+	if err := IfPostDeleted(*req.Pid); err != nil {
+		return nil, err
+	}
+
+	post, err1 := dao.Post.FindOne(req.Pid)
+	postvotes, err2 := dao.Postvote.Where("pid = ?", req.Pid).FindAll()
+	replies, err3 := dao.Reply.Where("pid = ? and deleted = 0", req.Pid).FindAll()
+	repliesvote, err4 := dao.Replyvote.Where("pid = ?", req.Pid).FindAll()
+
+	var p *model.PostE
+	var r *model.ReplyE
+	p.Post = post
+	p.Postvote = postvotes
+	r.Replyvote = repliesvote
+	r.Replies = replies
+	p.Replies = r.Replies
+
+	if err1 != nil {
+		return nil, err1
+	}
+	if err2 != nil {
+		return nil, err2
+	}
+	if err3 != nil {
+		return nil, err3
+	}
+	if err4 != nil {
+		return nil, err4
+	}
+
+	return nil, nil
+}
+
+//post是否重名
+func IfPostRename(userid int, title string) error {
+	one, err := dao.Post.Where("userid = ? and deleted = ?", userid, 0).Order("id desc").FindOne("title = ?", title)
+	if err != nil {
+		return err
+	}
+
+	if one != nil {
+		return errors.New("标题重复,请重新命名~")
+	}
+
+	return nil
+}
+
+//postid是否存在
 func IfPostExist(req int) error {
-	if count, err := dao.Post.Where("id = ?", req).FindCount(); err != nil {
+	if count, err := dao.Post.Where("id = ?", req).FindOne(); err != nil {
 		return err
 	} else {
-		if count == 0 {
+		if count == nil {
 			return errors.New("post不存在~")
 		}
 	}
 	return nil
 }
 
-func IfPostDeleted(pid, userid int) error {
-	one, err := dao.Post.Where("id = ? and userid = ?", pid, userid).FindOne()
+//post是否已经被删除
+func IfPostDeleted(pid int) error {
+	one, err := dao.Post.Where("id = ?", pid).FindOne()
 	if err != nil {
 		return err
 	}
 	if one.Deleted == 1 {
-		return errors.New("请勿重复删除")
+		return errors.New("post不存在~")
 	}
 
+	return nil
+}
+
+//post是否为自己创建的
+func IfPostOwned(pid, userid uint) error {
+	one, err := dao.Post.Where("id = ?", pid).FindOne()
+	if err != nil {
+		return err
+	}
+	if one.Userid != userid {
+		return errors.New("无权删除~")
+	}
+
+	return nil
+}
+
+//是否频繁发帖
+func IfPostOften(title string, userid uint) error {
+	if _, err := dao.Post.Where("userid = ? and deleted = ?", userid, 0).Order("id desc").FindOne("title = ?", title); err != nil {
+		return err
+	} else {
+		findOne, _ := dao.Post.Where("userid = ? and deleted = ?", userid, 0).Order("CreateAt desc").FindOne()
+		if findOne != nil {
+			if time.Now().Unix()-findOne.CreateAt.Timestamp() < 10 {
+				fmt.Println(time.Now().Unix() - findOne.CreateAt.Timestamp())
+				return errors.New("10秒内已经发过贴,请等待10秒~")
+			}
+		}
+	}
 	return nil
 }

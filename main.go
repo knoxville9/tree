@@ -6,6 +6,10 @@ import (
 )
 
 func main() {
+
+	//one, _ := dao.Post.Where("").FindOne(36)
+	//
+	//fmt.Println(one)
 	server := g.Server()
 	server.Run()
 }

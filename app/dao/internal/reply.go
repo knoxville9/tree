@@ -32,7 +32,6 @@ type replyColumns struct {
 	Content  string //
 	CreateAt string //
 	Deleted  string // 删除为1
-	Num      string //
 }
 
 var (
@@ -48,7 +47,6 @@ var (
 			Content:  "content",
 			CreateAt: "CreateAt",
 			Deleted:  "deleted",
-			Num:      "num",
 		},
 	}
 )
