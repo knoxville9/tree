@@ -31,6 +31,6 @@ func init() {
 	root.ALL("/postvote", api.PostVote)
 	root.ALL("/replyvote", api.ReplyVote)
 	root.ALL("/post", api.Post)
-	root.ALL("/reply", api.Reply)
+	root.ALL("/reply", api.Reply) //
 
 }
