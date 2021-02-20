@@ -23,21 +23,14 @@ func init() {
 	s.Plugin(&swagger.Swagger{})
 	s.Use(service.Middlewave.Ctx)
 	s.Use(service.Middlewave.MiddlewareTea)
-	User := s.Group("/user")
-	gtoken.Middleware(User)
-	User.ALL("/signup", api.User.Signup)
-	User.ALL("/profile", api.User.Profile)
-	Post := s.Group("/post")
 
-	gtoken.Middleware(Post)
-	Post.ALL("/", api.Post)
+	root := s.Group("/")
+	gtoken.Middleware(root)
 
-	PostVote := s.Group("/postvote")
-	gtoken.Middleware(PostVote)
-	PostVote.ALL("/", api.PostVote)
-
-	reply := s.Group("/reply")
-	gtoken.Middleware(reply)
-	reply.ALL("/", api.Reply)
+	root.ALL("/user", api.User)
+	root.ALL("/postvote", api.PostVote)
+	root.ALL("/replyvote", api.ReplyVote)
+	root.ALL("/post", api.Post)
+	root.ALL("/reply", api.Reply)
 
 }
