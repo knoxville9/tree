@@ -62,7 +62,8 @@ func (s *postService) Delete(ctx context.Context, req *model.PostDoDelete) error
 	return nil
 }
 
-func (s *postService) Detail(ctx context.Context, req *model.PostDoDetail) (*model.PostE, error) {
+//查看post详情
+func (s *postService) Detail(ctx context.Context, req *model.PostDoDetail) (*model.PostDetail, error) {
 
 	if err := IfPostExist(*req.Pid); err != nil {
 		return nil, err
@@ -72,18 +73,17 @@ func (s *postService) Detail(ctx context.Context, req *model.PostDoDetail) (*mod
 		return nil, err
 	}
 
-	post, err1 := dao.Post.FindOne(req.Pid)
+	post, err1 := dao.Post.Where("deleted", 0).FindOne(req.Pid)
 	postvotes, err2 := dao.Postvote.Where("pid = ?", req.Pid).FindAll()
-	replies, err3 := dao.Reply.Where("pid = ? and deleted = 0", req.Pid).FindAll()
-	repliesvote, err4 := dao.Replyvote.Where("pid = ?", req.Pid).FindAll()
+	replies, err3 := dao.Reply.Where("pid = ? and deleted = ?", req.Pid, 0).FindAll()
+	repliesvote, err4 := dao.Replyvote.As("rv").InnerJoin("reply r", "rv.replyid=r.id").Where("r.pid = ?", req.Pid).FindAll()
 
-	var p *model.PostE
-	var r *model.ReplyE
-	p.Post = post
-	p.Postvote = postvotes
-	r.Replyvote = repliesvote
-	r.Replies = replies
-	p.Replies = r.Replies
+	Detail := &model.PostDetail{}
+
+	Detail.Post = post
+	Detail.PostVote = postvotes
+	Detail.Reply = replies
+	Detail.Replyvote = repliesvote
 
 	if err1 != nil {
 		return nil, err1
@@ -98,7 +98,7 @@ func (s *postService) Detail(ctx context.Context, req *model.PostDoDetail) (*mod
 		return nil, err4
 	}
 
-	return nil, nil
+	return Detail, nil
 }
 
 //post是否重名
@@ -133,8 +133,10 @@ func IfPostDeleted(pid int) error {
 	if err != nil {
 		return err
 	}
-	if one.Deleted == 1 {
-		return errors.New("post不存在~")
+	if one != nil {
+		if one.Deleted == 1 {
+			return errors.New("post不存在~")
+		}
 	}
 
 	return nil
@@ -146,8 +148,10 @@ func IfPostOwned(pid, userid uint) error {
 	if err != nil {
 		return err
 	}
-	if one.Userid != userid {
-		return errors.New("无权删除~")
+	if one != nil {
+		if one.Userid != userid {
+			return errors.New("无权删除~")
+		}
 	}
 
 	return nil

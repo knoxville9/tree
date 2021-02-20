@@ -12,11 +12,6 @@ import (
 type Post internal.Post
 
 // Fill with you ideas below.
-type PostE struct {
-	*Post
-	Replies  []*Reply    `json:"Replies"`
-	Postvote []*Postvote `json:"Postvote"`
-}
 
 type PostDoCreate struct {
 	Userid  int
@@ -35,4 +30,11 @@ type PostDoDelete struct {
 
 type PostDoDetail struct {
 	Pid *int `json:"pid"   v:"required|integer"`
+}
+
+type PostDetail struct {
+	Post      *Post
+	PostVote  []*Postvote
+	Reply     []*Reply
+	Replyvote []*Replyvote
 }

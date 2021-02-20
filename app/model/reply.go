@@ -11,15 +11,15 @@ import (
 // Reply is the golang structure for table reply.
 type Reply internal.Reply
 
-type ReplyE struct {
-	Replies   []*Reply
-	Replyvote []*Replyvote
-}
-
 // Fill with you ideas below.
 
 type ReplyDoCreate struct {
 	Userid  int
 	Pid     *int   `json:"pid"   v:"required|integer"`
 	Content string `json:"Content" v:"required|length:10,255"`
+}
+
+type ReplyDoDelete struct {
+	Pid *int `json:"pid"   v:"required|integer"`
+	Rid *int `json:"rid"   v:"required|integer"`
 }

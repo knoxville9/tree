@@ -29,4 +29,8 @@ func init() {
 	PostVote.Middleware(service.Middlewave.Auth)
 	PostVote.ALL("/", api.PostVote)
 
+	reply := s.Group("/reply")
+	reply.Middleware(service.Middlewave.Auth)
+	reply.ALL("/", api.Reply)
+
 }

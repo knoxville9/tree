@@ -15,7 +15,9 @@ type sessionService struct {
 //退出时删除session
 func (s *sessionService) Remove(ctx context.Context) error {
 	get := Context.Get(ctx)
-	get.Session.Remove(SessionKey)
+	if err := get.Session.Remove(SessionKey); err != nil {
+		return err
+	}
 	return nil
 
 }

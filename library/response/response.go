@@ -17,11 +17,13 @@ func Json(r *ghttp.Request, code int, message string, data ...interface{}) {
 	if len(data) > 0 {
 		responseData = data[0]
 	}
-	r.Response.WriteJson(JsonResponse{
+	if err := r.Response.WriteJson(JsonResponse{
 		Code:    code,
 		Message: message,
 		Data:    responseData,
-	})
+	}); err != nil {
+		return
+	}
 }
 
 // 返回JSON数据并退出当前HTTP执行函数。

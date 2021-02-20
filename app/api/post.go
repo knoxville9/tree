@@ -101,6 +101,9 @@ func (a *postApi) Delete(r *ghttp.Request) {
 }
 
 //post详细
+// @Summary post详情
+// @Param pid formData string true "postid"
+// @Router /post/detail [post]
 func (a *postApi) Detail(r *ghttp.Request) {
 	var req *model.PostDoDetail
 	if err := r.Parse(&req); err != nil {
@@ -109,7 +112,14 @@ func (a *postApi) Detail(r *ghttp.Request) {
 		}
 	} else {
 
+		detail, err := service.Post.Detail(r.Context(), req)
+
+		if err != nil {
+			response.JsonExit(r, http.StatusInternalServerError, err.Error(), nil)
+		}
+
+		response.Json(r, http.StatusOK, "", detail)
+
 	}
-	response.Json(r, http.StatusOK, "删除post成功~")
 
 }
