@@ -10,6 +10,7 @@ require (
 	github.com/antchfx/xpath v1.1.11 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gocolly/colly v1.2.0
+	github.com/goflyfox/gtoken v1.4.1 // indirect
 	github.com/gogf/gf v1.15.3
 	github.com/gogf/swagger v1.2.0
 	github.com/golang/protobuf v1.4.3 // indirect
@@ -30,4 +31,5 @@ require (
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+
 )

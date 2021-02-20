@@ -50,10 +50,9 @@ func (u *userApi) Signup(r *ghttp.Request) {
 // @Param passport formData string true "用户名"
 // @Param password formData string true "密码"
 // @Router /user/login [post]
-func (u *userApi) Login(r *ghttp.Request) {
+func (u *userApi) Login(r *ghttp.Request) (string, interface{}) {
 
 	var req *model.UserDoLogInReq
-	ctx := r.Context()
 	//校验登录参数
 	if err := r.Parse(&req); err != nil {
 
@@ -61,12 +60,16 @@ func (u *userApi) Login(r *ghttp.Request) {
 			response.JsonExit(r, http.StatusInternalServerError, a.FirstString(), nil)
 		}
 	}
-	if err := service.User.Login(ctx, req); err != nil {
-		response.JsonExit(r, http.StatusInternalServerError, err.Error(), nil)
 
-	} else {
-		response.Json(r, http.StatusOK, "登录成功", nil)
+	if err := service.User.Login(r.Context(), req); err != nil {
+		response.JsonExit(r, http.StatusInternalServerError, err.Error(), nil)
 	}
+
+	if !r.GetVar("passport").IsNil() {
+		return r.GetVar("passport").String(), ""
+
+	}
+	return "", nil
 
 }
 
@@ -81,14 +84,14 @@ func (u *userApi) Profile(r *ghttp.Request) {
 
 }
 
-// @Summary 退出
-// @Router /user/logout [get]
-func (u *userApi) Logout(r *ghttp.Request) {
-	if err := service.User.Logout(r.Context()); err != nil {
-		response.JsonExit(r, http.StatusInternalServerError, err.Error(), nil)
-
-	} else {
-		response.JsonExit(r, http.StatusOK, "退出成功", nil)
-	}
-
-}
+//// @Summary 退出
+//// @Router /user/logout [get]
+//func (u *userApi) Logout(r *ghttp.Request) {
+//	if err := service.User.Logout(r.Context()); err != nil {
+//		response.JsonExit(r, http.StatusInternalServerError, err.Error(), nil)
+//
+//	} else {
+//		response.JsonExit(r, http.StatusOK, "退出成功", nil)
+//	}
+//
+//}

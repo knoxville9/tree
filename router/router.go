@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/goflyfox/gtoken/gtoken"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/swagger"
 	"lqc.com/tree/app/api"
@@ -10,27 +11,33 @@ import (
 func init() {
 
 	s := g.Server()
+	gtoken := &gtoken.GfToken{
+		LoginPath:        "/login",
+		LoginBeforeFunc:  api.User.Login,
+		LogoutPath:       "/logout",
+		AuthExcludePaths: g.SliceStr{"/user/signup"}, // 不拦截路径 /user/info,/system/user/info,/system/user,
+		GlobalMiddleware: true,                       // 开启全局拦截，默认关闭
+	}
+
 	s.Use(service.Middlewave.MiddlewareErrorHandler)
 	s.Plugin(&swagger.Swagger{})
 	s.Use(service.Middlewave.Ctx)
 	s.Use(service.Middlewave.MiddlewareTea)
 	User := s.Group("/user")
-	User.ALL("/login", api.User.Login)
+	gtoken.Middleware(User)
 	User.ALL("/signup", api.User.Signup)
-	User.ALL("/logout", api.User.Logout)
-	User.Middleware(service.Middlewave.Auth)
 	User.ALL("/profile", api.User.Profile)
 	Post := s.Group("/post")
-	Post.Middleware(service.Middlewave.Auth)
 
+	gtoken.Middleware(Post)
 	Post.ALL("/", api.Post)
 
 	PostVote := s.Group("/postvote")
-	PostVote.Middleware(service.Middlewave.Auth)
+	gtoken.Middleware(PostVote)
 	PostVote.ALL("/", api.PostVote)
 
 	reply := s.Group("/reply")
-	reply.Middleware(service.Middlewave.Auth)
+	gtoken.Middleware(reply)
 	reply.ALL("/", api.Reply)
 
 }
