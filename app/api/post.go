@@ -17,9 +17,10 @@ type postApi struct {
 
 //列表
 // @Summary 获得post列表
-// @Param page query string true "页数"
-// @Param size query string true "行数"
-// @Router /post/list [get]
+// @Param page formData string true "页数"
+// @Param size formData string true "行数"
+// @Param token formData string true "token"
+// @Router /post/list [Post]
 func (a *postApi) List(r *ghttp.Request) {
 	var req *model.PostDoList
 
@@ -55,6 +56,7 @@ func (a *postApi) List(r *ghttp.Request) {
 // @Summary 发post
 // @Param title formData string true "标题"
 // @Param content formData string true "内容"
+// @Param token formData string true "token"
 // @Router /post/create [post]
 func (a *postApi) Create(r *ghttp.Request) {
 	var req *model.PostDoCreate
@@ -83,6 +85,7 @@ func (a *postApi) Create(r *ghttp.Request) {
 //删帖
 // @Summary 删除post
 // @Param pid formData string true "postid"
+// @Param token formData string true "token"
 // @Router /post/delete [post]
 func (a *postApi) Delete(r *ghttp.Request) {
 	var req *model.PostDoDelete
@@ -103,6 +106,7 @@ func (a *postApi) Delete(r *ghttp.Request) {
 //post详细
 // @Summary post详情
 // @Param pid formData string true "postid"
+// @Param token formData string true "token"
 // @Router /post/detail [post]
 func (a *postApi) Detail(r *ghttp.Request) {
 	var req *model.PostDoDetail

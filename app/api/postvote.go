@@ -18,6 +18,7 @@ type postVoteApi struct {
 // @Summary 踩赞
 // @Param pid formData  string true "post的id"
 // @Param vote formData string true "1赞,0踩"
+// @Param token formData string true "token"
 // @Router /postvote/vote [post]
 func (a *postVoteApi) Vote(r *ghttp.Request) {
 	var req *model.PostvoteDoVote

@@ -17,6 +17,7 @@ type replyApi struct {
 //发帖
 // @Summary 回复post
 // @Param content formData string true "内容"
+// @Param token formData string true "token"
 // @Router /reply/create [post]
 func (a *replyApi) Create(r *ghttp.Request) {
 	var req *model.ReplyDoCreate
@@ -40,6 +41,7 @@ func (a *replyApi) Create(r *ghttp.Request) {
 // @Summary 删除回复,只能删除自己的回复
 // @Param pid formData string true "pid"
 // @Param rid formData string true "rid"
+// @Param token formData string true "token"
 // @Router /reply/delete [post]
 func (a *replyApi) Delete(r *ghttp.Request) {
 	var req *model.ReplyDoDelete

@@ -18,6 +18,7 @@ type replyVoteApi struct {
 // @Summary 踩赞
 // @Param replyid formData  string true "回复id"
 // @Param vote formData string true "1赞,0踩"
+// @Param token formData string true "token"
 // @Router /replyvote/vote [post]
 func (a *replyVoteApi) Vote(r *ghttp.Request) {
 	var req *model.ReplyvoteDoVote

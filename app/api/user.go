@@ -49,7 +49,7 @@ func (u *userApi) Signup(r *ghttp.Request) {
 // @Summary 登录
 // @Param passport formData string true "用户名"
 // @Param password formData string true "密码"
-// @Router /user/login [post]
+// @Router /login [post]
 func (u *userApi) Login(r *ghttp.Request) (string, interface{}) {
 
 	var req *model.UserDoLogInReq
@@ -74,7 +74,8 @@ func (u *userApi) Login(r *ghttp.Request) (string, interface{}) {
 }
 
 // @Summary 获得用户信息
-// @Router /user/profile [get]
+// @Param token formData string true "token"
+// @Router /user/profile [Post]
 func (u *userApi) Profile(r *ghttp.Request) {
 	if user, err := service.User.Profile(r.Context()); err != nil {
 		response.JsonExit(r, http.StatusInternalServerError, err.Error(), nil)
@@ -84,14 +85,9 @@ func (u *userApi) Profile(r *ghttp.Request) {
 
 }
 
-//// @Summary 退出
-//// @Router /user/logout [get]
-//func (u *userApi) Logout(r *ghttp.Request) {
-//	if err := service.User.Logout(r.Context()); err != nil {
-//		response.JsonExit(r, http.StatusInternalServerError, err.Error(), nil)
-//
-//	} else {
-//		response.JsonExit(r, http.StatusOK, "退出成功", nil)
-//	}
-//
-//}
+// @Summary 退出
+// @Param token formData string true "token"
+// @Router /logout [Post]
+func (u *userApi) Logout(r *ghttp.Request) {
+
+}
