@@ -19,6 +19,7 @@ func init() {
 		AuthExcludePaths: g.SliceStr{"/user/signup"}, // 不拦截路径 /user/info,/system/user/info,/system/user,
 		GlobalMiddleware: true,                       // 开启全局拦截，默认关闭
 	}
+	//
 
 	s.Use(service.Middlewave.MiddlewareErrorHandler)
 	s.Plugin(&swagger.Swagger{})
