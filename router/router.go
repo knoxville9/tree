@@ -12,6 +12,7 @@ func init() {
 
 	s := g.Server()
 	gtoken := &gtoken.GfToken{
+		CacheMode:        2,
 		LoginPath:        "/login",
 		LoginBeforeFunc:  api.User.Login,
 		LogoutPath:       "/logout",
@@ -22,15 +23,18 @@ func init() {
 	s.Use(service.Middlewave.MiddlewareErrorHandler)
 	s.Plugin(&swagger.Swagger{})
 	s.Use(service.Middlewave.Ctx)
-	s.Use(service.Middlewave.MiddlewareTea)
 
 	root := s.Group("/")
 	gtoken.Middleware(root)
 
-	root.ALL("/user", api.User)
-	root.ALL("/postvote", api.PostVote)
-	root.ALL("/replyvote", api.ReplyVote)
-	root.ALL("/post", api.Post)
-	root.ALL("/reply", api.Reply) //
-
+	root.ALLMap(g.Map{
+		"/list":             api.Post.List,
+		"/post/delete/:pid": api.Post.Delete,
+		"/post/detail/:pid": api.Post.Detail,
+		"/profile":          api.User.Profile,
+		"/reply/delete":     api.Reply.Delete,
+		"/reply/create":     api.Reply.Create,
+		"/postvote":         api.PostVote.Vote,
+		"/replyvote":        api.ReplyVote.Vote,
+	})
 }
