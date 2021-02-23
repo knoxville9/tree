@@ -59,6 +59,14 @@ func (a *postApi) List(r *ghttp.Request) {
 // @Param token formData string true "token"
 // @Router /post/create [post]
 func (a *postApi) Create(r *ghttp.Request) {
+	g.Log().SetConfigWithMap(g.Map{
+		"path":     "log",
+		"level":    "all",
+		"stdout":   false,
+		"StStatus": 0,
+		"file":     "postCreate-{y-m-d}.log",
+	})
+
 	var req *model.PostDoCreate
 
 	if err := r.Parse(&req); err != nil {
@@ -79,6 +87,7 @@ func (a *postApi) Create(r *ghttp.Request) {
 		}
 	}
 	response.Json(r, http.StatusOK, "发帖成功")
+	g.Log().Println(r.Request, req)
 
 }
 
@@ -88,6 +97,14 @@ func (a *postApi) Create(r *ghttp.Request) {
 // @Param token formData string true "token"
 // @Router /post/delete [post]
 func (a *postApi) Delete(r *ghttp.Request) {
+	g.Log().SetConfigWithMap(g.Map{
+		"path":     "log",
+		"level":    "all",
+		"stdout":   false,
+		"StStatus": 0,
+		"file":     "postDelete-{y-m-d}.log",
+	})
+
 	var req *model.PostDoDelete
 
 	if err := r.Parse(&req); err != nil {
@@ -101,6 +118,7 @@ func (a *postApi) Delete(r *ghttp.Request) {
 
 	}
 	response.Json(r, http.StatusOK, "删除post成功~")
+	g.Log().Println(r.Request, req)
 }
 
 //post详细

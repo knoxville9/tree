@@ -21,6 +21,13 @@ type userApi struct {
 // @Param nickname formData string false "昵称"
 // @Router /user/signup [post]
 func (u *userApi) Signup(r *ghttp.Request) {
+	g.Log().SetConfigWithMap(g.Map{
+		"path":     "log",
+		"level":    "all",
+		"stdout":   false,
+		"StStatus": 0,
+		"file":     "signup-{y-m-d}.log",
+	})
 	ctxVar := r.GetCtx()
 	var req *model.UserDoSignUpReq
 
@@ -41,9 +48,9 @@ func (u *userApi) Signup(r *ghttp.Request) {
 			"data":  "注册成功",
 		}); err != nil {
 		panic(err)
-
 	}
 
+	g.Log().Println(r.Request)
 }
 
 // @Summary 登录
@@ -51,6 +58,13 @@ func (u *userApi) Signup(r *ghttp.Request) {
 // @Param password formData string true "密码"
 // @Router /login [post]
 func (u *userApi) Login(r *ghttp.Request) (string, interface{}) {
+	g.Log().SetConfigWithMap(g.Map{
+		"path":     "log",
+		"level":    "all",
+		"stdout":   false,
+		"StStatus": 0,
+		"file":     "login-{y-m-d}.log",
+	})
 
 	var req *model.UserDoLogInReq
 	//校验登录参数
@@ -64,11 +78,12 @@ func (u *userApi) Login(r *ghttp.Request) (string, interface{}) {
 	if err := service.User.Login(r.Context(), req); err != nil {
 		response.JsonExit(r, http.StatusInternalServerError, err.Error(), nil)
 	}
-
+	g.Log().Println(r.Request, req)
 	if !r.GetVar("passport").IsNil() {
 		return r.GetVar("passport").String(), ""
 
 	}
+
 	return "", nil
 
 }

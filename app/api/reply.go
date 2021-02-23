@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/util/gvalid"
 	"lqc.com/tree/app/model"
@@ -20,6 +21,13 @@ type replyApi struct {
 // @Param token formData string true "token"
 // @Router /reply/create [post]
 func (a *replyApi) Create(r *ghttp.Request) {
+	g.Log().SetConfigWithMap(g.Map{
+		"path":     "log",
+		"level":    "all",
+		"stdout":   false,
+		"StStatus": 0,
+		"file":     "replyCreate-{y-m-d}.log",
+	})
 	var req *model.ReplyDoCreate
 
 	if err := r.Parse(&req); err != nil {
@@ -34,6 +42,7 @@ func (a *replyApi) Create(r *ghttp.Request) {
 
 	}
 	response.Json(r, http.StatusOK, "回复成功")
+	g.Log().Println(r.Request, req)
 
 }
 
@@ -44,6 +53,13 @@ func (a *replyApi) Create(r *ghttp.Request) {
 // @Param token formData string true "token"
 // @Router /reply/delete [post]
 func (a *replyApi) Delete(r *ghttp.Request) {
+	g.Log().SetConfigWithMap(g.Map{
+		"path":     "log",
+		"level":    "all",
+		"stdout":   false,
+		"StStatus": 0,
+		"file":     "replyDelete-{y-m-d}.log",
+	})
 	var req *model.ReplyDoDelete
 
 	if err := r.Parse(&req); err != nil {
@@ -57,4 +73,5 @@ func (a *replyApi) Delete(r *ghttp.Request) {
 
 	}
 	response.Json(r, http.StatusOK, "删除回复成功~")
+	g.Log().Println(r.Request, req)
 }

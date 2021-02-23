@@ -14,6 +14,7 @@ type UserService struct{}
 
 //注册
 func (s *UserService) Signup(ctx context.Context, req *model.UserDoSignUpReq) error {
+
 	//如何昵称没有就用用户名
 	if req.Nickname == "" {
 		req.Nickname = req.Passport
@@ -56,13 +57,13 @@ func (s *UserService) Login(ctx context.Context, req *model.UserDoLogInReq) erro
 	if err := Context.Get(ctx).Session.Set(SessionKey, user); err != nil {
 		return err
 	}
-
 	return nil
 
 }
 
 //退出
 func (s *UserService) Logout(ctx context.Context) error {
+
 	if err := Context.Get(ctx).Session.Remove(SessionKey); err != nil {
 		return err
 	}

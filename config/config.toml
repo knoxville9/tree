@@ -18,7 +18,7 @@
     sessionPath = "tmp/sessions"   # Session存储的文件目录路径。默认为当前系统临时目录下的gsessions目录
 # Logger configurations.
 [logger]
-    path = "/tmp/log/gf-demos"
+    path = "logs"
     level = "all"
     stdout = true
 
@@ -35,7 +35,7 @@
 [database.logger]
     Path = "/tmp/log/gf-demos/sql"
     Level = "all"
-    Stdout = true
+    Stdout = false
 
 # GF-CLI工具配置
 [gfcli]

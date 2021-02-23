@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/util/gvalid"
 	"lqc.com/tree/app/model"
@@ -21,6 +22,13 @@ type postVoteApi struct {
 // @Param token formData string true "token"
 // @Router /postvote/vote [post]
 func (a *postVoteApi) Vote(r *ghttp.Request) {
+	g.Log().SetConfigWithMap(g.Map{
+		"path":     "log",
+		"level":    "all",
+		"stdout":   false,
+		"StStatus": 0,
+		"file":     "postVote-{y-m-d}.log",
+	})
 	var req *model.PostvoteDoVote
 
 	if err := r.Parse(&req); err != nil {
@@ -34,5 +42,6 @@ func (a *postVoteApi) Vote(r *ghttp.Request) {
 
 	}
 	response.Json(r, http.StatusOK, "ok!~")
+	g.Log().Println(r.Request, req)
 
 }

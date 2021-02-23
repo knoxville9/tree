@@ -15,6 +15,7 @@ type postService struct {
 }
 
 func (s *postService) Create(ctx context.Context, req *model.PostDoCreate) error {
+
 	user := ctx.Value(ContextKey).(*model.Context).User
 
 	if err := IfPostOften(req.Title, user.Id); err != nil {
@@ -42,6 +43,7 @@ func (s *postService) List(ctx context.Context, req *model.PostDoList) ([]*model
 }
 
 func (s *postService) Delete(ctx context.Context, req *model.PostDoDelete) error {
+
 	user := ctx.Value(ContextKey).(*model.Context).User
 
 	if err := IfPostExist(*req.Pid); err != nil {
@@ -58,7 +60,6 @@ func (s *postService) Delete(ctx context.Context, req *model.PostDoDelete) error
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
