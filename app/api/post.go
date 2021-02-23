@@ -91,6 +91,7 @@ func (a *postApi) Create(r *ghttp.Request) {
 
 }
 
+//
 //删帖
 // @Summary 删除post
 // @Param pid formData string true "postid"
