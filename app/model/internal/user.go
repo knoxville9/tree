@@ -10,10 +10,11 @@ import (
 
 // User is the golang structure for table user.
 type User struct {
-	Id       uint        `orm:"id,primary" json:"id"`       // 用户ID
-	Passport string      `orm:"passport"   json:"passport"` // 用户账号
-	Password string      `orm:"password"   json:"-"`        // 用户密码
-	Nickname string      `orm:"nickname"   json:"nickname"` // 用户昵称
-	CreateAt *gtime.Time `orm:"create_at"  json:"createAt"` // 创建时间
-	UpdateAt *gtime.Time `orm:"update_at"  json:"updateAt"` // 更新时间
+	Id       uint        `orm:"id,primary" json:"id"`       //
+	Passport string      `orm:"Passport"   json:"passport"` //
+	Password string      `orm:"Password"   json:"password"` //
+	Nickname string      `orm:"Nickname"   json:"nickname"` //
+	CreateAt *gtime.Time `orm:"CreateAt"   json:"createAt"` //
+	UpdateAt *gtime.Time `orm:"UpdateAt"   json:"updateAt"` //
+	Status   int         `orm:"status"     json:"status"`   // 正常1,锁定2,拉黑-1,未激活0
 }

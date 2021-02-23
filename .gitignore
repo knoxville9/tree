@@ -24,3 +24,4 @@ go.sum
 /1.txt
 /tmp/
 !/tree.exe
+/logs/

@@ -9,9 +9,12 @@ import (
 )
 
 // Post is the golang structure for table post.
-type Post internal.Post
 
 // Fill with you ideas below.
+
+type Post struct {
+	internal.Post
+}
 
 type PostDoCreate struct {
 	Userid  int

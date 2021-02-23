@@ -8,8 +8,9 @@ import (
 	"lqc.com/tree/app/model/internal"
 )
 
-// User is the golang structure for table user.
-type User internal.User
+type User struct {
+	internal.User
+}
 
 // Fill with you ideas below.
 

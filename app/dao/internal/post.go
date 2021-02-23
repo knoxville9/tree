@@ -33,6 +33,7 @@ type postColumns struct {
 	Title    string //
 	Content  string //
 	Deleted  string // 删除为1
+	Status   string // 正常1,精华9
 }
 
 var (
@@ -49,6 +50,7 @@ var (
 			Title:    "title",
 			Content:  "content",
 			Deleted:  "deleted",
+			Status:   "status",
 		},
 	}
 )
